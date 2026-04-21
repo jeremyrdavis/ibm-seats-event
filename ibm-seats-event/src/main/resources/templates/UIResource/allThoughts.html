@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>All Thoughts</title>
+    <style>
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin: 0; background-color: #f0f2f5; padding: 2rem; }
+        .card { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 600px; text-align: left; margin-bottom: 1rem; }
+        .content { font-size: 1.2rem; font-style: italic; margin-bottom: 0.5rem; color: #1c1e21; }
+        .author { font-weight: bold; color: #606770; }
+        .bio { font-size: 0.8rem; color: #8d949e; margin-top: 0.2rem; }
+        .id { font-size: 0.7rem; color: #adb5bd; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        h1 { color: #1c1e21; margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <h1>All Thoughts</h1>
+    {#for thought in thoughts}
+        <div class="card">
+            <div class="id">Thought #{thought.id}</div>
+            <div class="content">"{thought.content}"</div>
+            <div class="author">- {thought.author}</div>
+            {#if thought.authorBio}
+                <div class="bio">{thought.authorBio}</div>
+            {/if}
+        </div>
+    {/for}
+</body>
+</html>

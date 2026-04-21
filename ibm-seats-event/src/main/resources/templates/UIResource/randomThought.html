@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Random Thought</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f0f2f5; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 600px; text-align: center; }
+        .content { font-size: 1.5rem; font-style: italic; margin-bottom: 1rem; color: #1c1e21; }
+        .author { font-weight: bold; color: #606770; }
+        .bio { font-size: 0.9rem; color: #8d949e; margin-top: 0.2rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="content">"{thought.content}"</div>
+        <div class="author">- {thought.author}</div>
+        {#if thought.authorBio}
+            <div class="bio">{thought.authorBio}</div>
+        {/if}
+    </div>
+</body>
+</html>
