@@ -2,6 +2,8 @@ package com.redhat.demos.thoughts;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 public class Thought extends PanacheEntity {
@@ -12,6 +14,9 @@ public class Thought extends PanacheEntity {
 
     private String authorBio;
 
+    @Enumerated(EnumType.STRING)
+    DisplayStatus displayStatus;
+
     public Thought() {
     }
 
@@ -19,6 +24,7 @@ public class Thought extends PanacheEntity {
         this.content = content;
         this.author = author;
         this.authorBio = authorBio;
+        this.displayStatus = DisplayStatus.PENDING;
     }
 
     @Override

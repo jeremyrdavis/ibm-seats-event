@@ -25,7 +25,7 @@ public class UIResource {
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getRandomThought() {
         Log.debug("Retrieving random thought");
-        List<Thought> thoughts = Thought.listAll();
+        List<Thought> thoughts = Thought.find("displayStatus", DisplayStatus.ENABLED).list();
         if (thoughts.isEmpty()) {
             return Templates.randomThought(new Thought("No thoughts found.", "System", ""));
         }
@@ -40,6 +40,6 @@ public class UIResource {
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance getAllThoughts() {
         Log.debug("Retrieving all thoughts");
-        return Templates.allThoughts(Thought.listAll());
+        return Templates.allThoughts(Thought.find("displayStatus", DisplayStatus.ENABLED).list());
     }
 }

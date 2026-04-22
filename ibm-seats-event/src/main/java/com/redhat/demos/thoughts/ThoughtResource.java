@@ -26,6 +26,7 @@ public class ThoughtResource {
         Log.debug("Adding thought: " + thought);
 
         QuarkusTransaction.requiringNew().run(() -> {
+            thought.displayStatus = DisplayStatus.PENDING;
             thought.persist();
             Log.debug("Thought persisted in transaction: " + thought);
         });
