@@ -1,8 +1,21 @@
 # thoughts-evaluator
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+A Quarkus microservice that provides AI-based content moderation for the [Thoughts App](../ibm-seats-event). It consumes thoughts from a Kafka topic, evaluates them using an IBM Granite LLM served by Ollama, and publishes the moderation verdict back to Kafka.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## How It Works
+
+1. Consumes `Thought` messages from the `thoughts-created` Kafka topic.
+2. Sends the thought's content to an IBM Granite model via Ollama for evaluation.
+3. The AI labels each thought as `APPROVED` or `REJECTED` based on content appropriateness.
+4. Publishes a `ThoughtEvaluation` (thought ID + verdict) to the `thoughts-evaluated` Kafka topic.
+5. The [ibm-seats-event](../ibm-seats-event) app consumes the verdict and updates the thought's display status.
+
+## Key Classes
+
+- **`ThoughtEvaluator`** — A Quarkus LangChain4j AI service interface (`@RegisterAiService`). Defines a system prompt that instructs the Granite model to act as a content moderator, responding with exactly `APPROVED` or `REJECTED`.
+- **`MyMessagingApplication`** — Kafka consumer/producer. Receives thoughts, calls the AI evaluator, and emits the verdict. Uses `@ActivateRequestContext` because AI services are request-scoped by default and Kafka handlers run outside a request context.
+- **`Thought`** — Record representing an incoming thought (content, author, authorBio).
+- **`ThoughtEvaluation`** — Record representing the moderation result (thought ID + approved boolean).
 
 ## Prerequisites: IBM Granite model via Ollama
 
@@ -31,7 +44,9 @@ You can run your application in dev mode that enables live coding using:
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Quarkus Dev Services will automatically start a Kafka broker — no manual setup needed.
+
+> **_NOTE:_** Quarkus ships with a Dev UI, available in dev mode at <http://localhost:8080/q/dev/>.
 
 ## Packaging and running the application
 
@@ -42,7 +57,7 @@ The application can be packaged using:
 ```
 
 It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+Be aware that it's not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
 The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
 
@@ -74,13 +89,5 @@ If you want to learn more about building native executables, please consult <htt
 
 ## Related Guides
 
-- Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka-getting-started)): Connect to Kafka with Reactive Messaging
-
-## Provided Code
-
-### Messaging codestart
-
-Use Quarkus Messaging
-
-[Related Apache Kafka guide section...](https://quarkus.io/guides/kafka-reactive-getting-started)
-
+- SmallRye Reactive Messaging - Kafka ([guide](https://quarkus.io/guides/kafka-getting-started)): Connect to Kafka with Reactive Messaging
+- Quarkus LangChain4j - Ollama ([guide](https://docs.quarkiverse.io/quarkus-langchain4j/dev/ollama.html)): Integrate with Ollama-served LLMs

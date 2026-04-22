@@ -9,9 +9,7 @@ import jakarta.persistence.Enumerated;
 public class Thought extends PanacheEntity {
 
     private String content;
-
     private String author;
-
     private String authorBio;
 
     @Enumerated(EnumType.STRING)
